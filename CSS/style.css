@@ -1,0 +1,538 @@
+*{
+   
+    box-sizing: border-box;
+    
+    
+}
+/* 1. 全域變數重設：對齊你提供的 Tailwind 邏輯 */
+:root {
+    --tw-bg-gradient: linear-gradient(180deg, 
+        #E0F7FF 0%,    /* 高亮淺藍 */
+        #3B82F6 30%,   /* 湛藍 */
+        #1E40AF 70%,   /* 深海藍 */
+        #0C1E33 100%   /* 極深海底 */
+    );
+    --tw-grain-opacity: 0.14;
+}
+
+/* 2. 容器層次：確保背景與內容完全隔離 */
+body, html {
+    margin: 0;
+    padding: 0;
+    min-height: 100vh;
+    background: var(--tw-bg-gradient) !important;
+    background-attachment: fixed !important;
+    position: relative;
+    overflow-x: hidden;
+}
+
+/* 3. 第一層質感：細緻噴砂 (Fine Sand Grain) */
+body::before {
+    content: "";
+    position: fixed;
+    inset: 0;
+    z-index: -1;
+    pointer-events: none;
+    
+    /* 使用高頻微小噪點 */
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='1.5' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+    mix-blend-mode: overlay;
+    opacity: var(--tw-grain-opacity);
+}
+
+/* 4. 第二層質感：物理亮屑 (Crystalline Sparkle) - 這是解決髒感的關鍵 */
+body::after {
+    content: "";
+    position: fixed;
+    inset: 0;
+    z-index: -1;
+    pointer-events: none;
+    
+    /* 這裡模擬光線在砂礫上的高亮反射點 */
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='sparkle'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix type='matrix' values='0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 0 0 0 1 -0.9'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23sparkle)'/%3E%3C/svg%3E");
+    mix-blend-mode: color-dodge; /* 讓白點亮起來，不影響底色 */
+    opacity: 0.08;
+}
+
+
+/* 清除 Tailwind 可能產生的背景重疊 */
+*, ::backdrop, :after, :before {
+    border: 0 solid;
+}/* 1. 基礎色層：嚴格還原照片中的淺藍到深藍漸層 */
+body {
+    margin: 0;
+    min-height: 100vh;
+    /* 這裡的色標是直接從照片中取色：極淺天藍 -> 湛藍 -> 藏青 -> 深海藍 */
+    background: linear-gradient(
+        180deg, 
+        #5cccf8 0%,    /* 頂部發光區 */
+        #3aa2d3 15%,   /* 淺藍過渡區 */
+        #037bb8 45%,   /* 湛藍主色 */
+        #003e5f 75%,   /* 深海藍 */
+        #021c35 100%   /* 底部深邃藍 */
+    ) !important;
+    background-attachment: fixed;
+    position: relative;
+    z-index: 0;
+}
+
+/* 2. 核心噴砂層：模擬照片中細碎且具備物理反光的砂紙感 */
+body::before {
+    content: "";
+    position: fixed;
+    inset: 0;
+    z-index: -1;
+    
+    /* baseFrequency="1.5" 讓顆粒細如粉末 */
+    /* feSpecularLighting 模擬光線照在沙粒上的反射，這才是照片中「亮亮但不髒」的關鍵 */
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='sandReflection'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='1.5' numOctaves='3' stitchTiles='stitch' result='noise'/%3E%3CfeSpecularLighting surfaceScale='1' specularConstant='1.2' specularExponent='30' lighting-color='white' in='noise'%3E%3CfeDistantLight elevation='50'/%3E%3C/feSpecularLighting%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23sandReflection)'/%3E%3C/svg%3E");
+    
+    /* 使用 screen 模式只保留亮點碎屑，徹底解決髒感 */
+    mix-blend-mode: screen; 
+    opacity: 0.15; 
+    pointer-events: none;
+}
+
+/* 3. 深度嵌入層：增加照片中那種紙張纖維的厚度感 */
+body::after {
+    content: "";
+    position: fixed;
+    inset: 0;
+    z-index: -2;
+    
+    /* baseFrequency="0.9" 提供較大一點的物理紋路 */
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='grainyBase'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23grainyBase)'/%3E%3C/svg%3E");
+    
+    mix-blend-mode: overlay;
+    opacity: 0.12;
+    pointer-events: none;
+}
+
+/* 確保上層元件（檔案袋、照片）清晰浮現 */
+section, .relative, .z-1 {
+    position: relative;
+    z-index: 10;
+}
+
+.whale-container {
+    position: fixed;
+    bottom: -45px;  /* 稍微埋入右下角 */
+    right: -15px;
+    width: 10vw;    /* 寬度約佔螢幕的 1/3 */
+    z-index: -1;    /* 放在照片與文字的後方 */
+    pointer-events: none; /* 滑鼠可穿透，不影響點擊 */
+    transition: transform 0.3s ease-out; /* 讓 JS 位移更滑順 */
+}
+
+.ocean-whale {
+    width: 100%;
+    /* 關鍵：讓白底變透明，黑線與背景藍色融合 */
+    mix-blend-mode: multiply; 
+    
+    /* 調整透明度與模糊，營造深海感 */
+    opacity: 0.5; 
+    filter: blur(1px) brightness(1.2); 
+    
+    /* 呼叫緩慢的海中搖晃動畫 */
+    animation: whaleMarineSway 12s ease-in-out infinite alternate;
+}
+
+@keyframes whaleMarineSway {
+    0%, 100% {
+        transform: rotate(-3deg) translateY(0) translateX(0);
+    }
+    33% {
+        transform: rotate(2deg) translateY(-20px) translateX(-15px);
+    }
+    66% {
+        transform: rotate(-1deg) translateY(-10px) translateX(10px);
+    }
+}
+
+
+h1{
+    
+
+}
+nav{
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 4em;
+    display: flex;
+    justify-content: flex-start;
+    z-index: 9999999;
+    background: rgba(253, 252, 252, 0.005);
+    min-width: auto;
+    font-family: Yen Sei ;
+    
+}
+.main-menu{
+    display: flex;
+    width: 100%;
+    margin-left: auto ;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    font-size: 16px;
+    align-items: center;
+}
+
+.main-menu > li:first-child{
+    margin-right: auto ;
+}
+.main-page-logo{
+
+     position: relative;
+    padding: 1rem;
+    background: rgba(212, 211, 211, 0.2);
+    border-radius: 50%; /* 變成圓形 */
+    box-shadow: 0 0 40px rgba(255, 255, 255, 0.15    );
+}
+.main-menu img{
+    height: 2em;
+    
+
+}
+.main-menu a {
+    display: block;
+    color: #ffffff;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    padding: 10px 20px;
+    text-decoration: none;
+    font-weight: 300;
+    justify-content: flex-end;
+    transition: opacity 0.3s;
+}
+.submenu{
+    display: none;
+    position: absolute;
+    
+   
+    background: rgba(0, 0, 0, 0.1) !important;
+    backdrop-filter: blur(5px) brightness(0.9) saturate(160%) !important ;
+    border: 1px solid rgba(255, 255, 255, 0.15) !important;
+    border-radius: 15px;
+    padding: 1rem 0;
+    min-width: max-content;
+    min-height: max-content;
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.3);
+    list-style: none;
+    padding: 10px 0;
+    border-radius: 8px;
+    min-width: 1%;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    font-weight: 300;
+    
+}
+.dropdown:hover .submenu  {
+    display: block;
+    
+}
+
+
+.first-section{
+    height: 120vh;
+    position: relative;
+
+}
+
+.first-container{
+    position: sticky;
+    top: 0;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+}
+
+.main-logo {
+    position: relative;
+    padding: 2rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    /* 確保父元素有寬高，分身才抓得到範圍 */
+    min-width: 300px; 
+    min-height: 300px;
+    z-index: 2; /* 提高整體層級 */
+    isolation: isolate;
+    overflow: visible !important; /* 確保浪花能噴出去 */
+}
+
+.wave-container {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 0; height: 0; /* 中心點 */
+    z-index: -1;
+    pointer-events: none;
+}
+
+.splash { 
+    position: absolute; 
+    top: 50%; 
+    left: 50%; 
+    width: 70vh; 
+    height: 70vh; 
+    transform: translate(-50%, -50%);
+    border-radius: 50%;
+    opacity: 0; 
+    box-shadow: 15vh -10vh 18vh 10vh white, -20vh 12vh 20vh white, 30vh 20vh 25vh white, -10vh -30vh 20vh white; 
+    filter: url(#fractal-shatter) contrast(180%) brightness(2.5); 
+    -webkit-mask-image: radial-gradient(circle, transparent 32vh, black 38vh, black 55vh, transparent 85vh); 
+    image-rendering: pixelated;
+}
+/* 三層浪花，不同步噴發，製造「一層層」的層次感 */
+.s1 { animation: organicSplash 6s cubic-bezier(0.1, 0.4, 0.2, 1) infinite; will-change: filter, transform; }
+.s2 { animation: organicSplash 6s cubic-bezier(0.1, 0.4, 0.2, 1) infinite 2s; will-change: filter, transform;
+     filter: url(#fractal-shatter) contrast(181%) brightness(2.4);}
+.s3 { animation: organicSplash 6s cubic-bezier(0.1, 0.4, 0.2, 1) infinite 4s; will-change: filter, transform; 
+    /* 同上，微調參數 */ filter: url(#fractal-shatter) contrast(179%) brightness(2.6); }
+@keyframes organicSplash {
+     0% { transform: translate(-50%, -50%) scale(0.4) rotate(0deg) skew(0deg); opacity: 0; filter: url(#fractal-shatter) contrast(180%) brightness(2); } 
+     20% { opacity: 1;  } 
+     100% { transform: translate(-50%, -50%) scaleX(8) scaleY(3) rotate(120deg) skew(25deg);
+         opacity: 0; 
+         filter: url(#fractal-shatter) contrast(150%) brightness(1.5) ); } }
+     }
+/* 建立獨立的背層濾鏡，解決「霧感」問題 */
+.main-logo img {
+
+    
+
+    width: 65vh;
+    height: auto;
+    z-index: 10;
+    filter:
+    brightness(1.1)
+    contrast(1.1)
+    drop-shadow(0 15px 15px rgba(0, 0, 0, 0.2));
+    position: relative; 
+    z-index: 10; pointer-events: none;
+   
+    animation: logoimgFloat 4s ease-in-out infinite alternate;
+}
+
+@keyframes logoimgFloat {
+    from { transform: translateY(0); }
+    to { transform: translateY(-10px); }
+}
+
+
+.member {
+    position: absolute;
+    transition: transform 0.1s ease-out, opacity 0.1s ease-out;
+    z-index: 3;
+    
+}
+
+.member img {
+    width: 100%;
+    border-radius: 10px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+    transition: transform 0.3s cubic-bezier(0.25, 1, 0.5, 1), box-shadow 0.3s;
+    cursor: pointer;
+
+    
+}
+
+.member img:hover{
+    transform: scale(1.1);
+    box-shadow: 0 15px 45px rgba(0,0,0,0.7);
+}
+
+.member:hover {
+    z-index: 999 !important;
+}
+
+/* --- 初始四散座標範例 (可依喜好調整) --- */
+.p1 { top: 10%; left: 5%; width: 12vw; transform: rotate(-10deg); }
+.p2 { top: 4%; left: 35%; width:18vw; transform: rotate(-1deg); }
+.p3 { top: 9%; right: 8%; width:13vw; transform: rotate(-4deg); }
+.p4 { top: 39%; left: 21.5%; width:11vw ;transform: rotate(6deg); }
+.p5 { bottom: 8%; left: 4%; width: 15vw  ;transform: rotate(5deg);  }
+.p6 { bottom: 4%; right: 47%;  width:15vw ; transform: rotate(-6deg); z-index: 0;}
+.p7 { bottom: 8%; right: 20%; width:12vw; transform: rotate(11deg);;}
+
+
+
+
+
+.memberCARD-container{
+    display: grid ;
+    grid-template-columns: repeat(6,1fr);
+    gap: 2%;
+    width: 97%;
+    margin: 0 auto;
+    padding: 20px 0;
+    
+}
+.memberCARD-container img {
+    width: 100%;
+}
+
+.card{
+    position: relative;
+    margin-top: 30px;
+}
+
+.folder-body{
+    background-color: #f3d9ab;
+    padding: 6%;   
+    width: 100%;
+    aspect-ratio: 16/9.2;
+    border-radius: 0 10px 10px 10px;
+    box-shadow: 5px 5px 15px rgba(0, 0, 0, 1);
+    overflow: hidden;
+    display: flex;
+    flex-direction: row;
+    align-items: flex-start;
+    justify-content: flex-start;
+    z-index: ;
+    
+
+
+}
+.folder-body img{
+    border-radius: 5px 0 5px 0;
+    box-shadow: 2px 2px 5px rgba(0, 0, 0, 2);
+    width: auto;
+    height: auto;
+    max-width: 50%;
+    max-height: 100%;
+    object-fit: contain;
+    object-position: left;
+   
+    
+    
+}
+
+.folder-nothing{
+    flex: 0 0 10%;
+}
+.folder-info{
+    flex: 0 0 40%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    text-align: left;
+}
+
+.folder-tab{
+    position: absolute;
+    top: -2em;
+    height: 2em;
+    left: 0;
+    padding: 0 1em;
+    padding-right: 2em;
+    background-color: #e3c18a;
+    font-size: ;
+    font-weight: bold;
+    border-top-left-radius: 5px;
+    border-top-right-radius: 10px;
+    z-index: 2;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 50%;
+    clip-path: polygon(0% 0%,75% 0%,100% 100%,0% 100%);
+    
+
+}
+.card:hover {
+    transform: translateY(-30px) rotate(-1deg);/*?查*/
+
+}
+
+
+
+.schedule-container/*先定義一些東東*/{
+    --folder-body-w:22%;
+    --showout-part:0.56;
+    --tab-w:45%;
+    --tab-gap: 0.02;
+    
+
+    display: flex;
+    padding: 80px 1.5%;
+    overflow: visible;
+    justify-content: flex-start;
+    align-items: flex-start;
+    
+}
+
+.topic/*開始使用*/{
+    position: relative;
+
+    width: var(--folder-body-w);
+    flex: 0 0 var(--folder-body-w);
+    margin-right: calc(var(--folder-body-w) * (1 - var(--showout-part)) * -1.1);
+    z-index: calc(var(--i) = 1);
+    transition: all 0.4s cubic-bezier(0.25, 1, 0.5, 1);/*給我去查*/
+
+    filter: brightness(calc(1 + (var(--i) * -0.03 )));
+
+}
+
+.topic .folder-tab {
+    position: absolute;
+    top: -2em;
+    width: var(--tab-w);
+    height: 2em;
+    background-color: #e3c18a;
+    border-radius: 12px 12px 0 0;/*給我去查*/
+
+    display: flex;
+    align-items: center;
+    padding: 0 1em;
+    font-size: ;
+    color: #5d4037;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+
+    left: calc(var(--i) * var(--tab-w) * (1 + var(--tab-w)));
+    box-shadow: 2px -2px 5px rgba(0,0,0,0.0.3);/*?去查*/
+
+
+}
+.topic .folder-body {
+    background-color: #f3d9ab;
+    padding: 5%;   
+    aspect-ratio: 16/9.2;
+    border-radius: 0 10px 10px 10px;
+    box-shadow: 5px 5px 15px rgba(0, 0, 0, 0.5);
+    display: flex;
+    flex-direction: row;
+    gap: 2%;
+
+}
+
+.topic .folder-body img {
+    border-radius: 8px;
+    box-shadow: 2px 2px 5px rgba(0, 0, 0, 2);
+    width: auto;
+    height: auto;
+    max-width: 50%;
+    max-height: 100%;
+    object-fit: cover;
+    object-position: right;
+}
+
+.topic:hover {
+    z-index: 101 !important;
+    filter: brightness(1);
+    transform: translateY(-40px) scale(1.05);
+    /* 抽出來後影子變大且均勻 */
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+}
+
+.topic:hover .folder-body { 
+    box-shadow: 10px 25px 40px rgba(0,0, 0, 0.3);
+
+}
